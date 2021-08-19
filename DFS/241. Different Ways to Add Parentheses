@@ -1,0 +1,43 @@
+// dfs + memory
+// like word ladder II
+
+
+class Solution {
+    Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
+
+    public List<Integer> diffWaysToCompute(String input) {
+        if(map.containsKey(input)) return map.get(input);
+        
+        List<Integer> res = new LinkedList<Integer>();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '-' || input.charAt(i) == '*' || input.charAt(i) == '+') {
+                List<Integer> left = diffWaysToCompute(input.substring(0, i));
+                List<Integer> right = diffWaysToCompute(input.substring(i+1));
+                for (int l = 0; l < left.size(); l++) {
+                    for (int r = 0; r < right.size(); r++) {
+                        int val = 0;
+                        switch(input.charAt(i)) {
+                            case '-':
+                                val = left.get(l) - right.get(r);
+                                break;
+                            case '+':
+                               val = left.get(l) + right.get(r);
+                                break;
+                            case '*':
+                                val = left.get(l) * right.get(r);
+                                break;
+                                
+                        }
+                        res.add(val);
+                    }
+                }
+            }
+        }
+        if (res.size() == 0) {
+            res.add(Integer.valueOf(input));
+        }
+        map.put(input, res);
+        return res;
+    }
+}
+
